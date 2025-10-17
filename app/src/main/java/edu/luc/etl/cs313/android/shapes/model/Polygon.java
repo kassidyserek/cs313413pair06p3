@@ -20,6 +20,7 @@ public final class Polygon extends Group {
     @Override
     public <Result> Result accept(final Visitor<Result> v) {
         // TODO your job
-        return null;
+        // to be tested
+        return v.onPolygon(this);
     }
 }
