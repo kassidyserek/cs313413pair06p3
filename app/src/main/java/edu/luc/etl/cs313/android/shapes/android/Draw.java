@@ -20,6 +20,8 @@ public class Draw implements Visitor<Void> {
         this.canvas = canvas;
         this.paint = paint;
         paint.setStyle(Style.STROKE);
+        paint.setColor(android.graphics.Color.BLACK);
+        paint.setStrokeWidth(3);
     }
 
     @Override
@@ -30,19 +32,23 @@ public class Draw implements Visitor<Void> {
 
     @Override
     public Void onStrokeColor(final StrokeColor c) {
+        canvas.save();
         int oldColor = paint.getColor(); //save current paint color
         paint.setColor(c.getColor()); //set new stroke color
         c.getShape().accept(this); //draw inner shape w/ new color
         paint.setColor(oldColor); //restore original color
+        canvas.restore();
         return null;
     }
 
     @Override
     public Void onFill(final Fill f) {
+        canvas.save();
         Style oldStyle = paint.getStyle(); // save current paint style
         paint.setStyle(Style.FILL_AND_STROKE); //set style to fill and stroke for filled shapes
         f.getShape().accept(this); //draw inner shape with fill
         paint.setStyle(oldStyle); //restore original paint style
+        canvas.restore();
         return null;
     }
 
@@ -70,10 +76,12 @@ public class Draw implements Visitor<Void> {
 
     @Override
     public Void onOutline(Outline o) {
+        canvas.save();
         Style oldStyle = paint.getStyle(); //save current paint style
         paint.setStyle(Style.STROKE); //set style to stroke for outline-only drawings
         o.getShape().accept(this); //recursively draw inner shape with outline
         paint.setStyle(oldStyle); //restore original paint style
+        canvas.restore();
         return null;
     }
 
